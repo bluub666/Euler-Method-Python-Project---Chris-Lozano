@@ -1,0 +1,1 @@
+This is the README. This project was created with the sole purpose of a Python project where differential equations, mechanics, and Python all combine into one neat application that emphasises the utility of computers. Anyone is free to use this for any purposes.
