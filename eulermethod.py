@@ -64,4 +64,6 @@ def small_angle(theta_intial, dt, num_steps):
   
   theta_values = [theta_initial]
   
-  
+  for i in range(num_steps):
+    theta_now = theta_values[-1]
+    theta_next = theta_initial * np.cos(np.sqrt(g / L) * t + i * dt)
