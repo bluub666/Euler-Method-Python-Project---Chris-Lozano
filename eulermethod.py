@@ -31,6 +31,9 @@ def euler_method(theta_initial, omega_intial, dt, num_steps): #This function nee
   #Create an array with the starting conditions:
   theta_values = [theta_initial]
   omega_values = [omega_initial]
+  ##Edit 5/28/24 decided to add a time values axis for plotting in MatPlot
+  time_values = [0] #Array initialized at t = 0
+    
   #As we begin walking more steps, we will append our values to these two arrays until we have walked the amount of steps that we defined at the beginning.
 
   #Let's now use the Euler Method formulas stated above:
@@ -39,8 +42,6 @@ def euler_method(theta_initial, omega_intial, dt, num_steps): #This function nee
     theta_now = theta_values[-1]
     omega_now = omega_values[-1] #These are the values of theta that will be getting updated each time an iteration happens. The subsequent value will depend on it as well.
     #Note that theta and omega must be the [-1] element so that we can always recall our last value of the list, otherwise this would be too cumbersome.
-    ##Edit 5/28/24 decided to add a time values axis for plotting in MatPlot
-    time_values = [0] #Array initialized at t = 0
     
     theta_next = theta_now + omega_now * dt
     omega_next = omega_now - (g / L) * np.sin(theta_now) * dt
