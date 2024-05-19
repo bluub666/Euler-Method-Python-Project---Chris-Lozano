@@ -7,7 +7,9 @@
 
 import numpy as np #While we could work with the math module, numpy has a built in array object that can only store homogenous sets of data, so it is more optimal to work with.
 ##EDIT 5/18/24 Let us add the Matplotlib module to attempt to plot these results
-import matplot.pyplot as plt
+import matplotlib.pyplot as plt
+
+# Background ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #The differential equation that describes the motion of a pendulum, ignoring friction and air resistance is:
 # θ" + g/L sin(θ) = 0
@@ -23,6 +25,9 @@ import matplot.pyplot as plt
     #ω_n+1 = ω_n - (g/L * sin(θ_n)) * dt
     #This means that both of these equations will depend on the previous like a recursion. 
 #Now that we have our two equations, let us define a function, which we will call euler_method:
+
+
+# Function Definitions :) -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def euler_method(theta_initial, omega_intial, dt, num_steps): #This function needs these 4 inputs. Every time we work with a differential equation, we need information of how the system started.
   g = 9.81 # (m/s^2)
@@ -83,8 +88,11 @@ def small_angle(theta_intial, dt, num_steps):
   return np.array(time_values), np.array(theta_values) #In principle, this is the exact same strategy as before, using Euler's method, but we shall see that once we begin to 
                                                        #increase the angle of release, this approximation crumbles
 
+
 #So far, we could be completely happy with these results and call it a day, as we can get a comparison of the values by outputting the arrays of both functions using print(), however, I want to go just one step further
 #we truly need to visualize the beauty of numerical solutions using computers, so let's try to set up a plot using Pyplot!
+
+# Defining Arguments -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #We will begin by defining the arguments of our two functions:
 theta_initial = np.pi / 2 #Initial angle, must be in radians
@@ -98,6 +106,8 @@ num_steps = 10000 #Number of tiny steps
 time_euler, theta_euler = euler_method(theta_initial, omega_initial, dt, num_steps) #This will be for the graph of the Euler Method solution
 
 time_small_angle, theta_small_angle = small_angle(theta_initial, dt, num_steps) #This one is for the small angle approximation
+
+# MatPlot LIB ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ##Note, after too much guess and check, I finally realized how to get these two on the same window next to one another. This took me an embarrassingly amount of time...
 plt.subplot(1,2,1) #This is what ensures that both the small angle and the Euler Method solution both pop up in ONE single window
