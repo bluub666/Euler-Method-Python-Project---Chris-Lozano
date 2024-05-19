@@ -108,20 +108,34 @@ time_euler, theta_euler = euler_method(theta_initial, omega_initial, dt, num_ste
 time_small_angle, theta_small_angle = small_angle(theta_initial, dt, num_steps) #This one is for the small angle approximation
 
 # MatPlot LIB ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#EDIT After plotting the graphs, I realized I needed to adjust the figure size:
+plt.figure(figsize=(14, 6))
 
 ##Note, after too much guess and check, I finally realized how to get these two on the same window next to one another. This took me an embarrassingly amount of time...
 plt.subplot(1,2,1) #This is what ensures that both the small angle and the Euler Method solution both pop up in ONE single window
-plt.plot(time_euler, theta_euler) #Here is what I mentioned earlier that we would need the time values because now we can visualize how theta changes over time
+plt.plot(time_euler, theta_euler, label="Euler's Method", color='b') #Here is what I mentioned earlier that we would need the time values because now we can visualize how theta changes over time EDIT: color and label
+plt.title("Euler's Method")
+plt.xlabel("Time")
+plt.ylabel("Angle (radians)")
+plt.legend()
 plt.grid(True) #The graph looks better if we add gridlines, especially when we compare it to the small angle approximation
 
 plt.subplot(1,2,2)
-plt.plot(time_small_angle, theta_small_angle)
-plt.grid(True)
+plt.plot(time_small_angle, theta_small_angle, label="Small Angle Approximation", color='r')
+plt.title("Small Angle Approximation")
+plt.xlabel("Time")
+plt.ylabel("Angle (radians)")
+plt.legend()
+plt.grid(True) #This edit makes the graphs looks way nicer 5/18/24
 
 plt.show() #Of course, we need the code to display our final result, this last bit ensures that when we run it, we obtain our graphs as a pop up window.
+
+# Closing Statement ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #Alright! There it is. I think that this is a nice little project that gives a brief introduction of methods for solving differential equations. A lot of people are intimidated by them, but using computers, we
 #can generate many many computations with for loops, and save all of our values using arrays.
 
-
+#Final note, feel free to adjust the initial conditions of the problem so long as theta_initial is not greater than pi, you wouldn't release a pendulum past 180 degrees... Also compare the range at which the small
+#angle approximation works! I thought of adding one last graph that showed the difference per iteration so we could see how the small angle approximation error begins to increase as time increases, but that might
+#be finished in the future. For now, we are left with a visualization of the power of Euler's method.
   
