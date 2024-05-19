@@ -6,6 +6,8 @@
 #thousands of calculations for us. Without further ado, let us begin.
 
 import numpy as np #While we could work with the math module, numpy has a built in array object that can only store homogenous sets of data, so it is more optimal to work with.
+##EDIT 5/18/24 Let us add the Matplotlib module to attempt to plot these results
+import matplot.pyplot as plt
 
 #The differential equation that describes the motion of a pendulum, ignoring friction and air resistance is:
 # θ" + g/L sin(θ) = 0
@@ -37,6 +39,8 @@ def euler_method(theta_initial, omega_intial, dt, num_steps): #This function nee
     theta_now = theta_values[-1]
     omega_now = omega_values[-1] #These are the values of theta that will be getting updated each time an iteration happens. The subsequent value will depend on it as well.
     #Note that theta and omega must be the [-1] element so that we can always recall our last value of the list, otherwise this would be too cumbersome.
+    ##Edit 5/28/24 decided to add a time values axis for plotting in MatPlot
+    time_values = [0] #Array initialized at t = 0
     
     theta_next = theta_now + omega_now * dt
     omega_next = omega_now - (g / L) * np.sin(theta_now) * dt
@@ -44,9 +48,10 @@ def euler_method(theta_initial, omega_intial, dt, num_steps): #This function nee
     #Append values to the array:
     theta_values.append(theta_next)
     omega_values.append(omega_next)
+    time_values.append(time_values[-1] + dt)
 
-  #Have the function return each value of theta and omega:
-  return np.array(theta_values), np.array(omega_values)
+  #Have the function return each value of theta and omega: ##EDIT 5/18/24 I decided omega values won't be necessary, now switched to time values for plotting in MatPlot
+  return np.array(time_values), np.array(theta_values)
 
 #And that is it for Euler's method! All we need to do from here is to input values into our function which will give us a list of our position and velocity at any point in time. Yay!
 
@@ -63,7 +68,49 @@ def small_angle(theta_intial, dt, num_steps):
   L = 1
   
   theta_values = [theta_initial]
+  ##Edit* Here I decided I will also use Euler's method to compute the actual sine solution. I will attempt to plot both of these solutions using MatPlot Edit: 5/18/24
+  time_values = [0]
+  t = 0
   
   for i in range(num_steps):
     theta_now = theta_values[-1]
-    theta_next = theta_initial * np.cos(np.sqrt(g / L) * t + i * dt)
+    theta_next = theta_initial * np.cos(np.sqrt(g / L) * t) ##Changed the "step" increase of the function, now works as simple increments of t as dt
+    t += dt
+    time_values.append(t)
+    theta_values.append(theta_next)
+
+  return np.array(time_values), np.array(theta_values) #In principle, this is the exact same strategy as before, using Euler's method, but we shall see that once we begin to 
+                                                       #increase the angle of release, this approximation crumbles
+
+#So far, we could be completely happy with these results and call it a day, as we can get a comparison of the values by outputting the arrays of both functions using print(), however, I want to go just one step further
+#we truly need to visualize the beauty of numerical solutions using computers, so let's try to set up a plot using Pyplot!
+
+#We will begin by defining the arguments of our two functions:
+theta_initial = np.pi / 2 #Initial angle, must be in radians
+omega_initial = 0 #Initial release angular velocity
+dt = .001 #Tiny step in time
+num_steps = 10000 #Number of tiny steps
+
+#Of course, I could call them something different to indicate that these are variables compared to the parameters in the functions, but so far this has worked on my codes and I am lazy.
+
+#From here, we need to get our x and y values for the pyplot graph. We will use the standard physics convention of having t in the x axis and the function output on the y axis.
+time_euler, theta_euler = euler_method(theta_initial, omega_initial, dt, num_steps) #This will be for the graph of the Euler Method solution
+
+time_small_angle, theta_small_angle = small_angle(theta_initial, dt, num_steps) #This one is for the small angle approximation
+
+##Note, after too much guess and check, I finally realized how to get these two on the same window next to one another. This took me an embarrassingly amount of time...
+plt.subplot(1,2,1) #This is what ensures that both the small angle and the Euler Method solution both pop up in ONE single window
+plt.plot(time_euler, theta_euler) #Here is what I mentioned earlier that we would need the time values because now we can visualize how theta changes over time
+plt.grid(True) #The graph looks better if we add gridlines, especially when we compare it to the small angle approximation
+
+plt.subplot(1,2,2)
+plt.plot(time_small_angle, theta_small_angle)
+plt.grid(True)
+
+plt.show() #Of course, we need the code to display our final result, this last bit ensures that when we run it, we obtain our graphs as a pop up window.
+
+#Alright! There it is. I think that this is a nice little project that gives a brief introduction of methods for solving differential equations. A lot of people are intimidated by them, but using computers, we
+#can generate many many computations with for loops, and save all of our values using arrays.
+
+
+  
